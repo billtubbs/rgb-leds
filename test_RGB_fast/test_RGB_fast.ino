@@ -8,7 +8,7 @@
 // ground, and power), like the LPD8806 define both DATA_PIN and CLOCK_PIN
 // Clock pin only needed for SPI based chipsets when not using hardware SPI
 #define DATA_PIN 2
-#define CLOCK_PIN 13
+#define BOARD_LED_PIN 13
 
 // Define the array of leds
 CRGB leds[NUM_LEDS];
@@ -55,15 +55,32 @@ void setup() {
     // FastLED.addLeds<DOTSTAR, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);  // BGR ordering is typical
     // FastLED.addLeds<APA102, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);  // BGR ordering is typical
     // FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RGB>(leds, NUM_LEDS);  // BGR ordering is typical
+    pinMode(BOARD_LED_PIN, OUTPUT);
 }
 
-void loop() { 
-  // Turn the LED on, then pause
-  leds[0] = CRGB::Red;
+int a = 1, b = 2, c = 3;
+
+void loop() {
+  // Light the LED on the Teensy board to show the board
+  // is working
+  digitalWrite(BOARD_LED_PIN, HIGH);
+  
+
+  // Turn on 3 LEDs, then pause
+  leds[a] = CRGB::Red;
+  leds[b] = CRGB::Green;
+  leds[c] = CRGB::Blue;
   FastLED.show();
-  delay(500);
-  // Now turn the LED off, then pause
-  leds[0] = CRGB::Black;
+  delay(100);
+  
+  // Turn off the LED on the Teensy board so it blinks
+  digitalWrite(BOARD_LED_PIN, LOW);
   FastLED.show();
-  delay(500);
+  delay(250);
+
+  // Change LED numbers for next loop
+  leds[a] = CRGB::Black;
+  a = b;
+  b = c;
+  c = (c + 1) % NUM_LEDS;
 }

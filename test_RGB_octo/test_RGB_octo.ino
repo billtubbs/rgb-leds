@@ -62,28 +62,23 @@ void setup() {
 int a = 1, b = 2, c = 3;
 
 void loop() {
-  char s[20];
-  // uncomment for voltage controlled speed
-  // millisec = analogRead(A9) / 40;
 
   // Light the LED on the Teensy board to show the board
   // is working
   digitalWrite(boardLed, HIGH);
 
+  // Turn on 3 LEDs, then pause
   leds.setPixel(a, RED);
   leds.setPixel(b, GREEN);
   leds.setPixel(c, BLUE);
   leds.show();
-  Serial.print("LEDs lit: ");
-  sprintf(s, "%3d, %3d, %3d", a, b, c);
-  Serial.println(s);
   delay(100);
   
   // Turn off the LED on the Teensy board so it blinks
-  digitalWrite(boardLed, LOW);
-  
+  digitalWrite(boardLed, LOW);  
   delay(250);
-  
+
+  // Change LED numbers for next loop
   leds.setPixel(a, BLK);
   a = b;
   b = c;
