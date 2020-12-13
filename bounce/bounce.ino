@@ -13,6 +13,11 @@
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
+// To store last time LED was updated
+long previousMillis = 0;
+// Sample time (milliseconds)
+unsigned long interval = 250;          
+
 void setup() { 
   // Uncomment/edit one of the following lines for your leds arrangement.
   // ## Clockless types ##
@@ -62,29 +67,33 @@ void setup() {
 
 }
 
-int i, c = 1500;
+int i, c = 20 * interval;
 float y = NUM_LEDS, v = 0, g = -9.81;
 
 void loop() {
 
-  // Turn on ball LED
-  if(c==0) {
-    y = 0;
-    v = 5;
-    c = 2000;
-  }
-  i = min(NUM_LEDS, (float) y);
-  leds[i] = CRGB::DarkBlue;
-  y = y + v;
-  if(y < 0) {
-    v = - 0.85*v;
-    y = - y;
-  }
-  v = v + 0.001*g - 0.05*v*v;
-  c--;
-  FastLED.show();
-  delay(5);
+  unsigned long currentMillis = millis();
 
-  // Change LED numbers for next loop
-  leds[i] = CRGB::Black;
+  if(currentMillis - previousMillis > interval) {
+
+    // Turn on ball LED
+    if(c==0) {
+      y = 0;
+      v = 0.7;
+      c = 20 * interval;
+    }
+    i = min(NUM_LEDS, (float) y);
+    leds[i] = CRGB::DarkBlue;
+    y = y + v;
+    if(y < 0) {
+      v = - 0.85*v;
+      y = - y;
+    }
+    v = v + 0.05 * g / interval - 0.02 * v * v;
+    c--;
+    FastLED.show();
+  
+    // Change LED numbers for next loop
+    leds[i] = CRGB::Black;
+  }
 }
